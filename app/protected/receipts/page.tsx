@@ -25,7 +25,7 @@ interface Receipt {
 }
 export default function ViewReceipts() {
     const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null)
-    const [receipts, setReceipts] = useState([])
+    const [receipts, setReceipts] = useState<{ [key: string]: Receipt[] }>({}) // Define the type explicitly
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
     const [loading, setLoading] = useState(false) // New state for loading
 

@@ -11,7 +11,21 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { updatePersonalInfo, signOutAction, getUserDetails } from "@/app/actions";
 
 export default function ProfilePage() {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{
+        gender: string;
+        isGovernmentServant: string;
+        isDisabled: string;
+        maritalStatus: string;
+        isSpouseWorking: string;
+        isSpouseDisabled: string;
+        numberOfChildren: string;
+        children: {
+            age: string;
+            isDisabled: boolean;
+            isStudying: boolean;
+            fullClaim: boolean;
+        }[];
+    }>({
         gender: "M",
         isGovernmentServant: "no",
         isDisabled: "no",
@@ -68,10 +82,10 @@ export default function ProfilePage() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        console.log("Form submitted", formData)
-        const updateInfo = await updatePersonalInfo(formData)
-
-        console.log("updateInfo", updateInfo);
+        // console.log("Form submitted", formData)
+        // Disabld  Form submission
+        // const updateInfo = await updatePersonalInfo(formData)
+        // console.log("updateInfo", updateInfo);
 
     }
 
