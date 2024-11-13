@@ -327,11 +327,14 @@ export const fetchReliefUtilization = async () => {
 
   if (error) {
     console.log(error);
+    throw error;
   }
-
   const categoryTotals = taxUtils?.reduce(
-    (acc, receipt) => {
-      const categoryName = receipt.relief_categories?.name as string;
+    (acc: any, receipt: any) => {
+      console.log("test");
+      console.log("receipt", receipt.relief_categories);
+
+      const categoryName = receipt.relief_categories?.name;
       const amount = receipt.amount;
 
       let category = acc.find((cat) => cat.name === categoryName);
@@ -344,11 +347,11 @@ export const fetchReliefUtilization = async () => {
         };
         acc.push(category);
       }
-      console.log("name", categoryName);
-      console.log("b4", category.used);
+      //   console.log("name", categoryName);
+      //   console.log("b4", category.used);
 
       category.used += amount;
-      console.log("after", category.used);
+      //   console.log("after", category.used);
 
       category.percentage = (category.used / category.limit) * 100;
 
