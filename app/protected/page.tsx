@@ -1,38 +1,73 @@
-import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
-import { createClient } from "@/utils/supabase/server";
-import { InfoIcon } from "lucide-react";
-import { redirect } from "next/navigation";
+"use client"
+import { useState } from "react"
 
-export default async function ProtectedPage() {
-  const supabase = await createClient();
+import { Progress } from "@/components/ui/progress"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useEffect } from "react"
+import { fetchReliefUtilization, fetchTotalRelief } from "@/app/actions";
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+interface Category {
+    name: string
+    used: number
+    limit: number
+    percentage: number
+}
+export default function Component() {
+    const [categories, setCategories] = useState<Category[]>([])
+    const [totalRelief, setTotalRelief] = useState(0)
 
-  if (!user) {
-    return redirect("/sign-in");
-  }
+    useEffect(() => {
+        async function getReliefUtilization() {
+            const category = await fetchReliefUtilization()
+            // console.log('category', category);
 
-  return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
+            setCategories(category ?? [])
+        }
+        async function getTotalRelief() {
+            const totalRelief = await fetchTotalRelief()
+            // console.log('totalRelief', setTotalRelief);
+
+            setTotalRelief(totalRelief ?? 0)
+        }
+
+        getTotalRelief()
+        getReliefUtilization()
+    }, [])
+
+
+    return (
+        <div className="flex flex-col bg-gray-50">
+
+            <main className="flex-1 p-4 overflow-y-auto">
+                <Card className="mb-6">
+                    <CardHeader>
+                        <CardTitle className="text-sm text-muted-foreground">Total Relief</CardTitle>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-3xl font-bold">RM{totalRelief.toLocaleString()}</span>
+                            {/* <span className="text-sm text-red-500">-5%</span> */}
+                        </div>
+                    </CardHeader>
+
+                </Card>
+
+                <div className="space-y-6">
+                    {categories.map((category) => (
+                        <div key={category.name} className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                                <span className="font-medium">{category.name}</span>
+                                <span style={{ color: category.percentage > 100 ? 'red' : 'inherit' }}>{category.percentage.toFixed(2)} %</span>
+                            </div>
+                            <div className="space-y-1">
+                                <Progress value={category.percentage} aria-label={`${category.name} usage`} />
+                                <div className="text-sm text-muted-foreground">
+                                    Used RM{category.used.toLocaleString()} of RM{category.limit.toLocaleString()}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </main>
+
         </div>
-      </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          {JSON.stringify(user, null, 2)}
-        </pre>
-      </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
-      </div>
-    </div>
-  );
+    )
 }
