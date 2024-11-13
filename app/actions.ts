@@ -131,7 +131,7 @@ export const signOutAction = async () => {
   return redirect("/sign-in");
 };
 
-export const getUserReceipts = async (year: number) => {
+export const getUserReceipts = async (year: string) => {
   "use server";
 
   const supabase = await createClient();

@@ -1,18 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Bell, Home, Search, User, ChevronRight } from "lucide-react"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { updatePersonalInfo, signOutAction, getUserDetails } from "@/app/actions";
-import { profile } from "console"
 
 export default function ProfilePage() {
     const [formData, setFormData] = useState({
@@ -35,13 +31,10 @@ export default function ProfilePage() {
     useEffect(() => {
         const fetchUserDetails = async () => {
             const userDetails = await getUserDetails()
-            console.log("userDetails", userDetails);
-            console.log("email ", userDetails?.email);
-            console.log("name ", userDetails?.user_metadata?.name);
-            console.log("avatar_url ", userDetails?.user_metadata?.avatar_url);
+
             setUser({
                 name: userDetails?.user_metadata?.name,
-                email: userDetails?.email,
+                email: userDetails?.email ?? "",
                 profileImg: userDetails?.user_metadata?.avatar_url
             })
             // setUser(userDetails)
@@ -102,7 +95,8 @@ export default function ProfilePage() {
 
                 </Card>
 
-                {/* <Card >
+                {/* Hide this card for now */}
+                <Card className="hidden">
                     <CardHeader>
                         <CardTitle>Personal Information</CardTitle>
                     </CardHeader>
@@ -284,7 +278,7 @@ export default function ProfilePage() {
                         </form>
 
                     </CardContent>
-                </Card> */}
+                </Card>
                 <form action={signOutAction}>
                     <Button type="submit" className="mt-5 w-full" variant={"destructive"}>
                         Logout

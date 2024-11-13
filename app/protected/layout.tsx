@@ -53,7 +53,7 @@ export default function RootLayout({
             </header>
             {children}
             <Toaster />
-
+            <div className="p-10"></div>
             <footer className="fixed bottom-0 w-full grid grid-cols-3 p-4 bg-white border-t">
                 <Link
                     href="/protected/dashboard"

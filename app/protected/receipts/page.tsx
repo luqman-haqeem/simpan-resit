@@ -1,9 +1,9 @@
 "use client"
 
-import { use, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { getUserReceipts, getPresignedUrl } from "@/app/actions";
 
-import { Bell, Home, Search, User, ChevronRight, CalendarIcon, Upload } from "lucide-react"
+import { CalendarIcon, Upload } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,22 +11,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Icons } from "@/components/icons"
 
-// Mock data for receipts
-// const receipts = [
-//     { id: 1, name: "Pharmacy Bill", category: "Healthcare", date: "2023-05-15", amount: 75.50, fileUrl: "/mock-receipt-1.pdf" },
-//     { id: 2, name: "Daycare Payment", category: "Dependent Care", date: "2023-05-10", amount: 200.00, fileUrl: "/mock-receipt-2.pdf" },
-//     { id: 3, name: "Bus Pass", category: "Transit & Parking", date: "2023-05-01", amount: 60.00, fileUrl: "/mock-receipt-3.pdf" },
-//     { id: 4, name: "Doctor Visit", category: "Healthcare", date: "2023-04-28", amount: 150.00, fileUrl: "/mock-receipt-4.pdf" },
-//     { id: 5, name: "Parking Fee", category: "Transit & Parking", date: "2023-04-25", amount: 15.00, fileUrl: "/mock-receipt-5.pdf" },
-// ]
-
-
-
-
-
+interface Receipt {
+    id: number;
+    title: string;
+    receipt_date: string;
+    amount: number;
+    file_url: string;
+    relief_categories: {
+        name: string;
+    };
+}
 export default function ViewReceipts() {
-    const [selectedReceipt, setSelectedReceipt] = useState(null)
+    const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null)
     const [receipts, setReceipts] = useState([])
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
     const [loading, setLoading] = useState(false) // New state for loading
@@ -36,9 +34,9 @@ export default function ViewReceipts() {
     async function handleReceipts() {
 
         const receipts = await getUserReceipts(selectedYear);
-        console.log('receipts', receipts);
+        // console.log('receipts', receipts);
 
-        const groupedReceipts = receipts.reduce((acc, receipt) => {
+        const groupedReceipts = receipts?.reduce((acc, receipt) => {
             if (!acc[receipt.relief_categories.name]) {
                 acc[receipt.relief_categories.name] = []
             }
@@ -54,16 +52,16 @@ export default function ViewReceipts() {
     }, [selectedYear]);
 
     async function handleViewReceipt() {
-        setLoading(true); // Set loading state to true when button is clicked
+        setLoading(true);
 
         console.log('create presigned url');
 
         console.log(selectedReceipt);
 
-        let data = await getPresignedUrl(selectedReceipt?.file_url)
+        let data = await getPresignedUrl(selectedReceipt?.file_url ?? '')
 
         window.open(data, '_blank');
-        setLoading(false); // Set loading state back to false after opening the URL
+        setLoading(false);
 
     }
 
@@ -109,7 +107,7 @@ export default function ViewReceipts() {
                                     <AccordionItem value={category} key={category}>
                                         <AccordionTrigger>{category}</AccordionTrigger>
                                         <AccordionContent>
-                                            {categoryReceipts.map((receipt) => (
+                                            {categoryReceipts.map((receipt: Receipt) => (
                                                 <Dialog key={receipt.id}>
                                                     <DialogTrigger asChild>
                                                         <Button
@@ -152,9 +150,11 @@ export default function ViewReceipts() {
                                                             <div>
                                                                 {receipt.file_url ?
                                                                     <Button onClick={handleViewReceipt} disabled={loading}>
-                                                                        {loading ? 'Loading...' : 'View Receipt File'}
+                                                                        {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                                                            : 'View Receipt File'}
                                                                     </Button> :
                                                                     null
+
                                                                 }
 
                                                             </div>
