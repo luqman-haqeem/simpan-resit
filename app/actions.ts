@@ -337,7 +337,7 @@ export const fetchReliefUtilization = async () => {
       const categoryName = receipt.relief_categories?.name;
       const amount = receipt.amount;
 
-      let category = acc.find((cat) => cat.name === categoryName);
+      let category = acc.find((cat: any) => cat.name === categoryName);
       if (!category) {
         category = {
           name: categoryName,
