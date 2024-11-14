@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { getUserReceipts, getPresignedUrl } from "@/app/actions";
 
-import { CalendarIcon, Upload } from "lucide-react"
+import { CalendarIcon, Upload, Plus } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -25,7 +25,9 @@ interface Receipt {
 }
 export default function ViewReceipts() {
     const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null)
-    const [receipts, setReceipts] = useState<{ [key: string]: Receipt[] }>({}) // Define the type explicitly
+    const [receipts, setReceipts] = useState<{ [key: string]: Receipt[] }>({})
+    const [hasReceipts, setHasReceipts] = useState(false);
+
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
     const [loading, setLoading] = useState(false) // New state for loading
 
@@ -44,6 +46,7 @@ export default function ViewReceipts() {
             return acc
         }, {})
         setReceipts(groupedReceipts);
+        setHasReceipts(Object.keys(groupedReceipts).length > 0)
 
     }
 
@@ -66,7 +69,7 @@ export default function ViewReceipts() {
     }
 
     return (
-        <div className="flex flex-col bg-gray-50">
+        <div className="flex flex-col ">
 
 
             <main className="flex-1 p-4 overflow-y-auto">
@@ -100,72 +103,82 @@ export default function ViewReceipts() {
 
                     <CardContent>
                         <ScrollArea className="h-[calc(100vh-300px)]">
+                            {hasReceipts ? (
+                                <Accordion type="single" collapsible className="w-full">
 
-                            <Accordion type="single" collapsible className="w-full">
-
-                                {Object.entries(receipts).map(([category, categoryReceipts]) => (
-                                    <AccordionItem value={category} key={category}>
-                                        <AccordionTrigger>{category}</AccordionTrigger>
-                                        <AccordionContent>
-                                            {categoryReceipts.map((receipt: Receipt) => (
-                                                <Dialog key={receipt.id}>
-                                                    <DialogTrigger asChild>
-                                                        <Button
-                                                            variant="ghost"
-                                                            className="w-full justify-start text-left mb-2 hover:bg-gray-100"
-                                                            onClick={() => setSelectedReceipt(receipt)}
-                                                        >
-                                                            <div className="flex items-center justify-between w-full">
+                                    {Object.entries(receipts).map(([category, categoryReceipts]) => (
+                                        <AccordionItem value={category} key={category}>
+                                            <AccordionTrigger>{category}</AccordionTrigger>
+                                            <AccordionContent>
+                                                {categoryReceipts.map((receipt: Receipt) => (
+                                                    <Dialog key={receipt.id}>
+                                                        <DialogTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                className="w-full justify-start text-left mb-2 hover:bg-gray-100"
+                                                                onClick={() => setSelectedReceipt(receipt)}
+                                                            >
+                                                                <div className="flex items-center justify-between w-full">
+                                                                    <div>
+                                                                        <p className="font-medium">{receipt.title}</p>
+                                                                        <p className="text-sm text-muted-foreground">{receipt.receipt_date}</p>
+                                                                    </div>
+                                                                    <div className="text-right">
+                                                                        <p className="font-medium">RM {receipt.amount.toFixed(2)}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </Button>
+                                                        </DialogTrigger>
+                                                        <DialogContent>
+                                                            <DialogHeader>
+                                                                <DialogTitle>Receipt Details</DialogTitle>
+                                                            </DialogHeader>
+                                                            <div className="space-y-4">
                                                                 <div>
-                                                                    <p className="font-medium">{receipt.title}</p>
-                                                                    <p className="text-sm text-muted-foreground">{receipt.receipt_date}</p>
+                                                                    <h3 className="font-medium">Name</h3>
+                                                                    <p>{receipt.title}</p>
                                                                 </div>
-                                                                <div className="text-right">
-                                                                    <p className="font-medium">RM {receipt.amount.toFixed(2)}</p>
+                                                                <div>
+                                                                    <h3 className="font-medium">Category</h3>
+                                                                    <p>{receipt.relief_categories.name}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <h3 className="font-medium">Date</h3>
+                                                                    <p>{receipt.receipt_date}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <h3 className="font-medium">Amount</h3>
+                                                                    <p>RM {receipt.amount.toFixed(2)}</p>
+                                                                </div>
+                                                                <div>
+                                                                    {receipt.file_url ?
+                                                                        <Button onClick={handleViewReceipt} disabled={loading}>
+                                                                            {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                                                                : 'View Receipt File'}
+                                                                        </Button> :
+                                                                        null
+
+                                                                    }
+
                                                                 </div>
                                                             </div>
-                                                        </Button>
-                                                    </DialogTrigger>
-                                                    <DialogContent>
-                                                        <DialogHeader>
-                                                            <DialogTitle>Receipt Details</DialogTitle>
-                                                        </DialogHeader>
-                                                        <div className="space-y-4">
-                                                            <div>
-                                                                <h3 className="font-medium">Name</h3>
-                                                                <p>{receipt.title}</p>
-                                                            </div>
-                                                            <div>
-                                                                <h3 className="font-medium">Category</h3>
-                                                                <p>{receipt.relief_categories.name}</p>
-                                                            </div>
-                                                            <div>
-                                                                <h3 className="font-medium">Date</h3>
-                                                                <p>{receipt.receipt_date}</p>
-                                                            </div>
-                                                            <div>
-                                                                <h3 className="font-medium">Amount</h3>
-                                                                <p>RM {receipt.amount.toFixed(2)}</p>
-                                                            </div>
-                                                            <div>
-                                                                {receipt.file_url ?
-                                                                    <Button onClick={handleViewReceipt} disabled={loading}>
-                                                                        {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                                                            : 'View Receipt File'}
-                                                                    </Button> :
-                                                                    null
+                                                        </DialogContent>
+                                                    </Dialog>
+                                                ))}
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    ))}
+                                </Accordion>
+                            ) : (<div className="text-center py-8">
+                                <p className="text-lg text-muted-foreground mb-4">No receipts yet. Add your first receipt now!</p>
+                                <Link href="/protected/receipts/upload">
+                                    <Button className="w-auto whitespace-nowrap">
+                                        <Upload className="mr-2 h-4 w-4" />
+                                        Upload Receipt
+                                    </Button>
+                                </Link>
+                            </div>)}
 
-                                                                }
-
-                                                            </div>
-                                                        </div>
-                                                    </DialogContent>
-                                                </Dialog>
-                                            ))}
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                ))}
-                            </Accordion>
                         </ScrollArea>
                     </CardContent>
                 </Card>
