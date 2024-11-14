@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { getReliefCategories, createReceipt } from "@/app/actions";
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
+import { Icons } from "@/components/icons"
 
 import {
     Command,
@@ -41,17 +42,17 @@ export default function ReceiptUpload() {
 
     const [file, setFile] = useState<File | null>(null)
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
     const [reliefCategories, setReliefCategories] = useState<Category[]>([])
     const [selectedCategory, setSelectedCategory] = React.useState<Category | null>(null)
     const fileInput = useRef<HTMLInputElement>(null);
     const { toast } = useToast()
+    const [loading, setLoading] = useState(false)
 
 
     async function handleCategories() {
 
         const reliefCategories = await getReliefCategories() ?? [];
-        console.log('reliefCategories', reliefCategories);
+        // console.log('reliefCategories', reliefCategories);
         setReliefCategories(reliefCategories);
 
     }
@@ -67,9 +68,17 @@ export default function ReceiptUpload() {
     }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        setLoading(true)
         event.preventDefault()
-        // Here you would typically send the form data to your backend
         console.log("Form submitted")
+
+        if (!selectedCategory) {
+            toast({
+                variant: "destructive",
+                description: "Please select a category",
+            })
+            return
+        }
 
         const formData = new FormData(event.currentTarget)
         formData.append("categoryId", selectedCategory?.id.toString() ?? '');
@@ -86,6 +95,8 @@ export default function ReceiptUpload() {
         toast({
             description: receipt.message,
         })
+
+        setLoading(false)
 
     }
 
@@ -211,8 +222,9 @@ export default function ReceiptUpload() {
                                 // className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                                 />
                             </div>
-                            <Button type="submit" className="w-full">
-                                Upload Receipt
+                            <Button type="submit" className="w-full" disabled={loading}>
+                                {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                    : 'Upload Receipt'}
                             </Button>
                         </form>
                     </CardContent>

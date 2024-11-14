@@ -257,6 +257,40 @@ export const createReceipt = async (receiptInfo: any) => {
   //   console.log(receipt);
 };
 
+export const deleteReceipt = async (receiptId: number) => {
+  console.log(receiptId);
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data?.user) {
+    console.log("Invalid user");
+    redirect("/login");
+  }
+  //   console.log("data.user.id", data.user.id);
+  //   console.log("receiptId", receiptId);
+
+  const { data: receipt, error: receiptError } = await supabase
+    .from("receipts")
+    .delete()
+    .eq("id", receiptId)
+    .eq("user_id", data.user.id);
+
+  if (receiptError) {
+    console.log("receiptError", receiptError);
+    return {
+      status: "failed",
+      message: `Receipt Not Deleted`,
+    };
+  }
+
+  console.log("receipt", receipt);
+  revalidatePath("/protected/receipts");
+
+  return {
+    status: "success",
+    message: `Successfully deleted receipt`,
+  };
+};
+
 interface PersonalInfo {
   gender: string;
   isGovernmentServant: boolean;
