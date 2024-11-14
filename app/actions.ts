@@ -47,7 +47,7 @@ export const signInAction = async (formData: FormData) => {
   });
 
   if (error) {
-    return encodedRedirect("error", "/sign-in", error.message);
+    return encodedRedirect("error", "/login", error.message);
   }
 
   return redirect("/protected");
@@ -127,7 +127,7 @@ export const resetPasswordAction = async (formData: FormData) => {
 export const signOutAction = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  return redirect("/sign-in");
+  return redirect("/login");
 };
 
 export const getUserReceipts = async (year: string) => {
@@ -183,7 +183,7 @@ export const createReceipt = async (receiptInfo: any) => {
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
     console.log("Invalid user");
-    redirect("/sign-in");
+    redirect("/login");
   }
   const receiptDate = receiptInfo.get("receiptDate") || null;
   const receiptTitle = receiptInfo.get("title");
@@ -274,7 +274,7 @@ export const updatePersonalInfo = async (personalInfo: PersonalInfo) => {
 
   if (error || !data?.user) {
     console.log("Invalid user");
-    // redirect("/sign-in");
+    // redirect("/login");
   }
 
   const insertData = {
@@ -309,7 +309,7 @@ export const fetchReliefUtilization = async () => {
 
   if (userInfoError || !userInfo?.user) {
     console.log("Invalid user");
-    redirect("/sign-in");
+    redirect("/login");
   }
 
   const { data: taxUtils, error } = await supabase
@@ -376,7 +376,7 @@ export const fetchTotalRelief = async () => {
 
   if (userInfoError || !userInfo?.user) {
     console.log("Invalid user");
-    redirect("/sign-in");
+    redirect("/login");
   }
 
   const { data: taxUtils, error } = await supabase
