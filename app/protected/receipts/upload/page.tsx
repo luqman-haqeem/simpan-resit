@@ -70,7 +70,7 @@ export default function ReceiptUpload() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         setLoading(true)
         event.preventDefault()
-        console.log("Form submitted")
+        // console.log("Form submitted")
 
         if (!selectedCategory) {
             toast({
@@ -83,10 +83,20 @@ export default function ReceiptUpload() {
         const formData = new FormData(event.currentTarget)
         formData.append("categoryId", selectedCategory?.id.toString() ?? '');
         formData.append("receiptFile", fileInput?.current?.files?.[0]!);
-        console.log(formData.get("categoryId"));
+        // console.log(formData.get("categoryId"));
 
-        const receipt = await createReceipt(formData);
-        console.log('receipt', receipt);
+        let receipt;
+        try {
+            receipt = await createReceipt(formData);
+        } catch (error) {
+            console.error("Error creating receipt:", error);
+            toast({
+                variant: "destructive",
+                description: "Failed to create receipt",
+            });
+            setLoading(false);
+            return;
+        }
 
         if (receipt.status == 'success') {
             router.push('/protected/receipts')
@@ -116,7 +126,7 @@ export default function ReceiptUpload() {
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="">Amount</Label>
-                                <Input id="amount" name="amount" placeholder="Enter receipt amount" type="number" required />
+                                <Input id="amount" name="amount" placeholder="Enter receipt amount" type="number" step="0.01" required />
                             </div>
 
                             <div className="flex flex-col space-y-2">
