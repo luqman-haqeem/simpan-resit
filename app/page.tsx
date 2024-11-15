@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, Receipt, PieChart, Clock, Shield } from 'lucide-react'
+import { ArrowRight, Receipt, PieChart, TabletSmartphone, Shield } from 'lucide-react'
 
 export default function LandingPage() {
     return (
@@ -61,7 +61,7 @@ export default function LandingPage() {
                                 {
                                     title: "Mobile-First Design",
                                     description: "Mobile-first approach, manage receipts seamlessly on any device, wherever you are.",
-                                    icon: Clock,
+                                    icon: TabletSmartphone,
                                 },
                                 {
                                     title: "Secure Storage",
