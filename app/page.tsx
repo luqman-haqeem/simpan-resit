@@ -36,7 +36,7 @@ export default function LandingPage() {
                             SimpanResit helps you organize, track, and maximize your tax relief claims with ease.
                         </p>
                         <Button asChild className="mt-4">
-                            <Link href="/signup">
+                            <Link href="/login">
                                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
                             </Link>
                         </Button>
@@ -126,9 +126,9 @@ export default function LandingPage() {
                 <section className="bg-primary text-primary-foreground py-12 md:py-24">
                     <div className="container text-center">
                         <h2 className="text-2xl font-bold mb-4">Ready to simplify your tax relief management?</h2>
-                        <p className="mb-8">Join thousands of users who are saving time and maximizing their tax relief with SimpanResit.</p>
+                        {/* <p className="mb-8">Join thousands of users who are saving time and maximizing their tax relief with SimpanResit.</p> */}
                         <Button asChild variant="secondary">
-                            <Link href="/signup">
+                            <Link href="/login">
                                 Sign Up Now <ArrowRight className="ml-2 h-4 w-4" />
                             </Link>
                         </Button>
@@ -141,7 +141,7 @@ export default function LandingPage() {
                     <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
                         © 2024 SimpanResit. All rights reserved.
                     </p>
-                    <nav className="flex items-center justify-center gap-4 md:justify-end">
+                    {/* <nav className="flex items-center justify-center gap-4 md:justify-end">
                         <Link href="/privacy" className="text-sm font-medium hover:underline">
                             Privacy Policy
                         </Link>
@@ -151,7 +151,7 @@ export default function LandingPage() {
                         <Link href="/contact" className="text-sm font-medium hover:underline">
                             Contact Us
                         </Link>
-                    </nav>
+                    </nav> */}
                 </div>
             </footer>
         </div>
