@@ -46,7 +46,7 @@ export default function LandingPage() {
                 <section id="features" className="bg-gray-100 dark:bg-gray-800 py-12 md:py-24">
                     <div className="container">
                         <h2 className="text-2xl font-bold text-center mb-12">Key Features</h2>
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                             {[
                                 {
                                     title: "Easy Receipt Upload",
@@ -58,11 +58,11 @@ export default function LandingPage() {
                                     description: "Monitor your tax relief claims in real-time",
                                     icon: PieChart,
                                 },
-                                // {
-                                //     title: "Automatic Categorization",
-                                //     description: "AI-powered receipt categorization",
-                                //     icon: Clock,
-                                // },
+                                {
+                                    title: "Mobile-First Design",
+                                    description: "Mobile-first approach, manage receipts seamlessly on any device, wherever you are.",
+                                    icon: Clock,
+                                },
                                 {
                                     title: "Secure Storage",
                                     description: "Your data is encrypted and securely stored",
@@ -86,7 +86,7 @@ export default function LandingPage() {
                 <section id="how-it-works" className="py-12 md:py-24">
                     <div className="container">
                         <h2 className="text-2xl font-bold text-center mb-12">How It Works</h2>
-                        <div className="grid gap-6 md:grid-cols-2">
+                        <div className="grid gap-6 md:grid-cols-3">
                             {[
                                 {
                                     step: "1",
@@ -99,11 +99,11 @@ export default function LandingPage() {
                                     title: "Track & Claim",
                                     description: "Monitor your tax relief and easily submit claims",
                                 },
-                                // {
-                                //     step: "3",
-                                //     title: "Categorize",
-                                //     description: "Our AI automatically categorizes your receipts for tax relief",
-                                // },
+                                {
+                                    step: "3",
+                                    title: "Categorize Expense",
+                                    description: "Organize each receipt by category for easy sorting and retrieval.",
+                                },
                             ].map((step, index) => (
                                 <Card key={index}>
                                     <CardHeader>
