@@ -13,10 +13,10 @@ export default function LandingPage() {
                         <span className="font-bold">SimpanResit</span>
                     </Link>
                     <nav className="ml-auto flex gap-4 sm:gap-6">
-                        <Link href="#features" className="text-sm font-medium hover:underline">
+                        <Link href="#features" className="text-sm font-medium hidden md:block hover:underline">
                             Features
                         </Link>
-                        <Link href="#how-it-works" className="text-sm font-medium hover:underline">
+                        <Link href="#how-it-works" className="text-sm font-medium hidden md:block hover:underline">
                             How It Works
                         </Link>
                         <Link href="/login" className="text-sm font-medium hover:underline">
