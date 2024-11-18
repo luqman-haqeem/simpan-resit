@@ -5,6 +5,7 @@ import { Bell, Home, Search, User, Upload } from "lucide-react"
 
 import { Toaster } from "@/components/ui/toaster"
 import NavBar from "@/components/NavBar"
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 export default function RootLayout({
     children,
@@ -14,11 +15,11 @@ export default function RootLayout({
     return (
         <div className="flex flex-col min-h-screen ">
 
-            <header className="flex items-center justify-between p-4 bg-white border-b">
+            <header className="flex items-center justify-between p-4 bg-white dark:bg-stone-950 border-b">
                 <h1 className="text-2xl font-bold">SimpanResit</h1>
                 <div className="flex items-center gap-4">
 
-
+                    <ThemeSwitcher />
                 </div>
             </header>
             {children}

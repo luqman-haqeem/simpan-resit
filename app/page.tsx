@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, Receipt, PieChart, TabletSmartphone, Shield } from 'lucide-react'
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { BentoDemo } from "@/components/bento-grid";
+import Image from "next/image"
+import Iphone15Pro from "@/components/ui/iphone-15-pro";
 
 export default function LandingPage() {
     return (
@@ -30,7 +33,7 @@ export default function LandingPage() {
             </header>
 
             <main className="flex-1">
-                <section className="px-4 py-12 md:py-24 lg:py-32 xl:py-48">
+                {/* <section className="px-4 py-12 md:py-24 lg:py-32 xl:py-48">
                     <div className="container flex flex-col items-center space-y-4 text-center">
                         <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
                             Easily Manage Your Tax Receipts in One Place
@@ -44,12 +47,55 @@ export default function LandingPage() {
                             </Link>
                         </Button>
                     </div>
+                </section> */}
+                <section className="w-full py-12 md:py-32 ">
+                    <div className="container px-4 md:px-6">
+                        <div className="grid gap-6 md:grid-cols-[1fr_200px]  lg:grid-cols-[1fr_200px] lg:gap-12 xl:grid-cols-[1fr_400px]">
+                            <div className="flex flex-col justify-center space-y-4">
+                                <div className="space-y-2">
+                                    <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                                        Easily Manage Your Tax Receipts in One Place
+                                    </h1>
+                                    <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                                        SimpanResit simplifies receipt management for tax relief claims. Secure, easy-to-use, and designed for individual taxpayers.
+                                    </p>
+                                </div>
+                                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                                    <Button asChild size="lg">
+                                        <Link href="/login">
+                                            Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                                        </Link>
+
+                                    </Button>
+                                    {/* <Button variant="outline" size="lg">
+                                        Learn More
+                                    </Button> */}
+                                </div>
+                            </div>
+                            <div className="relative">
+                                <Iphone15Pro
+                                    className="size-full"
+                                    src="https://via.placeholder.com/430x880"
+                                />
+                            </div>
+                            {/* <Image
+                                src="/placeholder.svg?height=400&width=400"
+                                width={400}
+                                height={400}
+                                alt="SimpanResit App Interface"
+                                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
+                            /> */}
+                        </div>
+                    </div>
                 </section>
+
 
                 <section id="features" className="bg-gray-100 dark:bg-gray-800 py-12 md:py-24">
                     <div className="container">
                         <h2 className="text-2xl font-bold text-center mb-12">Key Features</h2>
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                        <BentoDemo />
+
+                        {/* <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                             {[
                                 {
                                     title: "Easy Receipt Upload",
@@ -82,13 +128,14 @@ export default function LandingPage() {
                                     </CardContent>
                                 </Card>
                             ))}
-                        </div>
+                        </div> */}
                     </div>
                 </section>
 
                 <section id="how-it-works" className="py-12 md:py-24">
                     <div className="container">
                         <h2 className="text-2xl font-bold text-center mb-12">How It Works</h2>
+
                         <div className="grid gap-6 md:grid-cols-3">
                             {[
                                 {

@@ -9,7 +9,7 @@ export default function NavBar() {
 
     return (
 
-        <footer className="fixed bottom-0 w-full grid grid-cols-3 p-4 bg-white border-t">
+        <footer className="fixed bottom-0 w-full grid grid-cols-3 p-4 bg-white dark:bg-stone-950 border-t">
             <Link
                 href="/protected"
                 className={`flex flex-col items-center gap-1 text-sm font-medium  ${pathname === '/protected' ? 'text-orange-600' : 'text-muted-foreground'}`}
