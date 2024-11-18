@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { getUserReceipts, getPresignedUrl, deleteReceipt } from "@/app/actions";
 
-import { CalendarIcon, Upload, Trash2 } from "lucide-react"
+import { CalendarIcon, Upload, Trash2, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -204,7 +204,7 @@ export default function ViewReceipts() {
                                                                 {receipt.file_url ?
                                                                     <Button className="col-start-1 col-span-2" onClick={handleViewReceipt} disabled={loading}>
                                                                         {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                                                            : 'View Receipt File'}
+                                                                            : <>View Receipt <ExternalLink /></>}
                                                                     </Button> :
                                                                     null
                                                                 }
