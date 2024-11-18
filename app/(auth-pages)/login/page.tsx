@@ -29,8 +29,8 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center px-4 py-8">
-            <Card className="w-full max-w-md shadow-lg">
+        <div className="flex min-h-screen items-center justify-center px-4 py-8 ">
+            <Card className="w-full max-w-md shadow-lg shadow-[0px_0px_500px_-30px_#F77316]">
                 <CardHeader className="space-y-4 text-center">
                     <Receipt width={80}
                         height={80}
@@ -76,6 +76,8 @@ export default function LoginPage() {
                     </p>
                 </CardFooter> */}
             </Card>
+
         </div>
+
     )
 }

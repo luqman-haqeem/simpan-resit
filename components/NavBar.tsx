@@ -12,7 +12,7 @@ export default function NavBar() {
         <footer className="fixed bottom-0 w-full grid grid-cols-3 p-4 bg-white border-t">
             <Link
                 href="/protected"
-                className={`flex flex-col items-center gap-1 text-sm font-medium  ${pathname === '/protected' ? '' : 'text-muted-foreground'}`}
+                className={`flex flex-col items-center gap-1 text-sm font-medium  ${pathname === '/protected' ? 'text-orange-600' : 'text-muted-foreground'}`}
                 aria-label="Home"
             >
                 <Home className="w-5 h-5" />
@@ -20,7 +20,7 @@ export default function NavBar() {
             </Link>
             <Link
                 href="/protected/receipts"
-                className={`flex flex-col items-center gap-1 text-sm font-medium ${pathname === '/protected/receipts' ? '' : 'text-muted-foreground'}`}
+                className={`flex flex-col items-center gap-1 text-sm font-medium ${pathname === '/protected/receipts' ? 'text-orange-600' : 'text-muted-foreground'}`}
                 aria-label="Receipts"
             >
                 <Upload className="w-5 h-5" />
@@ -28,7 +28,7 @@ export default function NavBar() {
             </Link>
             <Link
                 href="/protected/profile"
-                className={`flex flex-col items-center gap-1 text-sm font-medium  ${pathname === '/protected/profile' ? '' : 'text-muted-foreground'}`}
+                className={`flex flex-col items-center gap-1 text-sm font-medium  ${pathname === '/protected/profile' ? 'text-orange-600' : 'text-muted-foreground'}`}
                 aria-label="Profile"
             >
                 <User className="w-5 h-5" />

@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, Receipt, PieChart, TabletSmartphone, Shield } from 'lucide-react'
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 export default function LandingPage() {
     return (
@@ -12,8 +13,10 @@ export default function LandingPage() {
                         <Receipt className="h-6 w-6" />
                         <span className="font-bold">SimpanResit</span>
                     </Link>
-                    <nav className="ml-auto flex gap-4 sm:gap-6">
-                        <Link href="#features" className="text-sm font-medium hidden md:block hover:underline">
+                    <nav className="ml-auto flex gap-4 place-items-center sm:gap-6">
+                        <ThemeSwitcher />
+
+                        <Link href="#features" className="text-sm  font-medium hidden md:block hover:underline">
                             Features
                         </Link>
                         <Link href="#how-it-works" className="text-sm font-medium hidden md:block hover:underline">
@@ -123,7 +126,7 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                <section className="bg-primary text-primary-foreground py-12 md:py-24">
+                <section className="bg-primary dark:bg-primary text-primary-foreground py-12 md:py-24">
                     <div className="container text-center">
                         <h2 className="text-2xl font-bold mb-4">Ready to simplify your tax relief management?</h2>
                         {/* <p className="mb-8">Join thousands of users who are saving time and maximizing their tax relief with SimpanResit.</p> */}

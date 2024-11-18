@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Link from "next/link"
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { ThemeProvider } from "next-themes";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import HeaderAuth from "@/components/header-auth";
@@ -38,7 +37,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
             <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
             <link rel="shortcut icon" href="/favicon.ico" />
@@ -46,17 +45,17 @@ export default function RootLayout({
             <meta name="apple-mobile-web-app-title" content="SimpanResit" />
             <link rel="manifest" href="/site.webmanifest" />
             <body className="bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800">
-                {/* <ThemeProvider
+                <ThemeProvider
                     attribute="class"
                     defaultTheme="system"
                     enableSystem
-                > */}
+                >
 
-                {children}
-                <Toaster />
+                    {children}
+                    <Toaster />
 
 
-                {/* </ThemeProvider> */}
+                </ThemeProvider>
 
             </body>
         </html >
