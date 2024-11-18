@@ -30,10 +30,10 @@ export default function LandingPage() {
                 <section className="px-4 py-12 md:py-24 lg:py-32 xl:py-48">
                     <div className="container flex flex-col items-center space-y-4 text-center">
                         <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                            Simplify Your Tax Relief Management
+                            Easily Manage Your Tax Receipts in One Place
                         </h1>
                         <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                            SimpanResit helps you organize, track, and maximize your tax relief claims with ease.
+                            SimpanResit simplifies receipt management for tax relief claims. Secure, easy-to-use, and designed for individual taxpayers.
                         </p>
                         <Button asChild className="mt-4">
                             <Link href="/login">
