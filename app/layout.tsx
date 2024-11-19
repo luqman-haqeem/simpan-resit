@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-    themeColor: "#FFFFFF",
+    themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -60,8 +60,10 @@ export default function RootLayout({
             <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
             <link rel="shortcut icon" href="/favicon.ico" />
             <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-            <meta name="apple-mobile-web-app-title" content="black-translucent" />
+            <meta name="theme-color" content="#000000"></meta>
+            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
             <link rel="manifest" href="/site.webmanifest" />
+
             <body className="bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800">
                 <ThemeProvider
                     attribute="class"
