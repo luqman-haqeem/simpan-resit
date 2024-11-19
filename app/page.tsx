@@ -75,7 +75,7 @@ export default function LandingPage() {
                             <div className="relative ">
                                 <Iphone15Pro
                                     className="size-full shadow-lg rounded-[50px] md:rounded-[35px] lg:rounded-[70px] shadow-[0px_0px_500px_-30px_#F77316]"
-                                    src="/dashboard.png"
+                                    src="/dashboard2.png"
                                 />
                             </div>
                             {/* <Image
