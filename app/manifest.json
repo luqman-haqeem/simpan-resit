@@ -3,10 +3,11 @@
   "short_name": "SimpanResit",
   "theme_color": "#00ff00",
   "background_color": "#ffffff",
-  "display": "browser",
-  "orientation": "natural",
+  "description": "A website store receipt for track tax relief utilization",
+  "display": "standalone",
+  "orientation": "portrait",
   "scope": "/",
-  "start_url": "/",
+  "start_url": "https://www.simpanresit.com/",
   "icons": [
     { "src": "icons/16x16.png", "sizes": "16x16", "type": "image/png" },
     { "src": "icons/32x32.png", "sizes": "32x32", "type": "image/png" },
@@ -19,7 +20,12 @@
     { "src": "icons/180x180.png", "sizes": "180x180", "type": "image/png" },
     { "src": "icons/192x192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icons/384x384.png", "sizes": "384x384", "type": "image/png" },
-    { "src": "icons/512x512.png", "sizes": "512x512", "type": "image/png" },
+    {
+      "src": "icons/512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "icons/512x512.png",
       "sizes": "512x512",
