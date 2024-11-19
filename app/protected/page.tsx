@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect } from "react"
 import { fetchReliefUtilization, fetchTotalRelief } from "@/app/actions";
 import { Skeleton } from "@/components/ui/skeleton"
+import GradualSpacing from "@/components/ui/gradual-spacing";
 
 interface Category {
     name: string
@@ -60,8 +61,12 @@ export default function Component() {
                             <>
                                 <CardTitle className="text-sm text-muted-foreground">Total Relief</CardTitle>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-3xl font-bold">RM{totalRelief.toLocaleString()}
-                                    </span>
+                                    {/* <span className="text-3xl font-bold">RM{totalRelief.toLocaleString()}
+                                    </span> */}
+                                    <GradualSpacing
+                                        className="font-display text-center text-3xl font-bold -tracking-widest  text-black dark:text-white  "
+                                        text={`RM${totalRelief.toLocaleString()}`}
+                                    />
                                 </div>
 
                             </>

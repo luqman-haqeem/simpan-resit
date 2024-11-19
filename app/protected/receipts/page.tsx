@@ -188,7 +188,7 @@ export default function ViewReceipts() {
                                                         <DialogTrigger asChild>
                                                             <Button
                                                                 variant="ghost"
-                                                                className="w-full justify-start text-left mb-2 hover:bg-gray-100"
+                                                                className="w-full justify-start text-left mb-2 hover:bg-gray-100 dark:hover:bg-gray-900"
                                                                 onClick={() => setSelectedReceipt(receipt)}
                                                             >
                                                                 <div className="flex items-center justify-between w-full">
@@ -244,7 +244,7 @@ export default function ViewReceipts() {
                                                                 <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                                                                     <AlertDialogTrigger asChild>
                                                                         <Button variant="destructive" className="col-end-5">
-                                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                                            <Trash2 className="h-4 w-4" />
 
                                                                         </Button>
                                                                     </AlertDialogTrigger>

@@ -72,10 +72,10 @@ export default function LandingPage() {
                                     </Button> */}
                                 </div>
                             </div>
-                            <div className="relative">
+                            <div className="relative ">
                                 <Iphone15Pro
-                                    className="size-full"
-                                    src="https://via.placeholder.com/430x880"
+                                    className="size-full shadow-lg rounded-[50px] md:rounded-[35px] lg:rounded-[70px] shadow-[0px_0px_500px_-30px_#F77316]"
+                                    src="/dashboard.png"
                                 />
                             </div>
                             {/* <Image
