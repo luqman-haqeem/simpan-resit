@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { updatePersonalInfo, signOutAction, getUserDetails } from "@/app/actions";
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function ProfilePage() {
     const [formData, setFormData] = useState<{
@@ -40,6 +41,8 @@ export default function ProfilePage() {
         email: "",
         profileImg: "",
     })
+    const [loading, setLoading] = useState(true)
+
 
 
     useEffect(() => {
@@ -54,6 +57,7 @@ export default function ProfilePage() {
             // setUser(userDetails)
         }
         fetchUserDetails()
+        setLoading(false)
     }, [])
 
     const handleChildrenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +99,21 @@ export default function ProfilePage() {
             <main className="flex-1 p-4 overflow-y-auto">
                 <Card className="mb-6">
                     <CardHeader className="text-wrap">
-                        <div className="flex items-center space-x-4  flex-wrap">
+                        {loading ? <>
+                            <div className="flex items-center space-x-4 flex-wrap">
+                                <span className="relative h-10 w-10 shrink-0 hidden sm:block">
+                                    <Skeleton className="rounded-full w-full h-full" />
+                                </span>
+                                <div>
+                                    <div className="leading-none tracking-tight">
+                                        <Skeleton className="w-[104px] h-6 max-w-full" />
+                                    </div>
+                                    <div className="pt-1">
+                                        <Skeleton className="w-[224px] h-6 max-w-full" />
+                                    </div>
+                                </div>
+                            </div>
+                        </> : <div className="flex items-center space-x-4  flex-wrap">
                             <Avatar className="hidden sm:block">
                                 <AvatarImage src={user.profileImg} alt="Profile picture" />
                                 <AvatarFallback>{user.name.substring(0, 1)}</AvatarFallback>
@@ -104,8 +122,10 @@ export default function ProfilePage() {
                                 <CardTitle>{user.name}</CardTitle>
                                 <p className="text-sm text-muted-foreground">{user.email}</p>
                             </div>
-                        </div>
+                        </div>}
                     </CardHeader>
+
+
 
                 </Card>
 

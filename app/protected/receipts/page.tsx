@@ -12,6 +12,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Icons } from "@/components/icons"
 import { useToast } from "@/hooks/use-toast"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import {
     Dialog,
@@ -50,9 +51,10 @@ export default function ViewReceipts() {
     const [hasReceipts, setHasReceipts] = useState(false);
 
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
-    const [loading, setLoading] = useState(false)
+    const [receiptLoading, setReceiptLoading] = useState(false)
     const { toast } = useToast()
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+    const [loading, setLoading] = useState(true)
 
 
     const years = ['2024', '2025'];
@@ -76,10 +78,11 @@ export default function ViewReceipts() {
 
     useEffect(() => {
         handleReceipts();
+        setLoading(false)
     }, [selectedYear]);
 
     async function handleViewReceipt() {
-        setLoading(true);
+        setReceiptLoading(true);
 
         // console.log('create presigned url');
         // console.log(selectedReceipt);
@@ -87,17 +90,17 @@ export default function ViewReceipts() {
         let data = await getPresignedUrl(selectedReceipt?.file_url ?? '')
 
         window.open(data, '_blank');
-        setLoading(false);
+        setReceiptLoading(false);
     }
 
     async function handleDeleteReceipt(id: number) {
 
 
-        setLoading(true);
+        setReceiptLoading(true);
         // console.log('id', id);
         const isDeleted = await deleteReceipt(id);
         // console.log('isDeleted', isDeleted);
-        setLoading(false);
+        setReceiptLoading(false);
 
         if (isDeleted.status == 'success') {
             handleReceipts()
@@ -139,11 +142,41 @@ export default function ViewReceipts() {
                                 </Button>
                             </Link>
                         </div>
+
+
                     </CardHeader>
 
                     <CardContent>
                         <ScrollArea className="h-[calc(100vh-300px)]">
-                            {hasReceipts ? (
+
+                            {loading ? <>
+                                <div className="w-full">
+                                    <div className="border-b">
+                                        <h3 className="flex">
+                                            <div className="flex flex-1 items-center justify-between py-4">
+                                                <Skeleton className="w-[200px] h-6 max-w-full" />
+
+                                            </div>
+                                        </h3>
+                                    </div>
+                                    <div className="border-b">
+                                        <h3 className="flex">
+                                            <div className="flex flex-1 items-center justify-between py-4">
+                                                <Skeleton className="w-[280px] h-6 max-w-full" />
+
+                                            </div>
+                                        </h3>
+                                    </div>
+                                    <div className="border-b">
+                                        <h3 className="flex">
+                                            <div className="flex flex-1 items-center justify-between py-4">
+                                                <Skeleton className="w-[360px] h-6 max-w-full" />
+
+                                            </div>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </> : <> {hasReceipts ? (
                                 <Accordion type="single" collapsible className="w-full">
 
                                     {Object.entries(receipts).map(([category, categoryReceipts]) => (
@@ -192,8 +225,8 @@ export default function ViewReceipts() {
                                                                 </div>
                                                                 {/* <div className="grid grid-cols-4 gap-4">
 
-                                                                    <Button variant="outline" onClick={() => handleDeleteReceipt(receipt.id)} className=" border border-transparent col-end-5 text-red-500 hover:bg-red-600" disabled={loading}>
-                                                                        {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                                                    <Button variant="outline" onClick={() => handleDeleteReceipt(receipt.id)} className=" border border-transparent col-end-5 text-red-500 hover:bg-red-600" disabled={receiptLoading}>
+                                                                        {receiptLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                                                                             : <Trash2 />}
                                                                     </Button>
 
@@ -202,8 +235,8 @@ export default function ViewReceipts() {
                                                             <DialogFooter className="grid grid-cols-4 gap-4">
 
                                                                 {receipt.file_url ?
-                                                                    <Button className="col-start-1 col-span-2" onClick={handleViewReceipt} disabled={loading}>
-                                                                        {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                                                    <Button className="col-start-1 col-span-2" onClick={handleViewReceipt} disabled={receiptLoading}>
+                                                                        {receiptLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                                                                             : <>View Receipt <ExternalLink /></>}
                                                                     </Button> :
                                                                     null
@@ -245,11 +278,15 @@ export default function ViewReceipts() {
                                         Upload Receipt
                                     </Button>
                                 </Link>
-                            </div>)}
+                            </div>)}</>}
+
 
                         </ScrollArea>
+
                     </CardContent>
+
                 </Card>
+
             </main>
 
 
