@@ -1,7 +1,7 @@
 {
   "name": "SimpanResit",
   "short_name": "SimpanResit",
-  "theme_color": "#00ff00",
+  "theme_color": "#000000",
   "background_color": "#ffffff",
   "description": "A website store receipt for track tax relief utilization",
   "display": "standalone",
