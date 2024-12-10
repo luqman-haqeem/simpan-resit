@@ -54,7 +54,7 @@ export default function LandingPage() {
                             <div className="flex flex-col justify-center space-y-4">
                                 <div className="space-y-2">
                                     <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                                        Easily Manage Your Tax Receipts in One Place
+                                        Easily Manage Your Receipts in One Place
                                     </h1>
                                     <p className="max-w-[600px] text-muted-foreground md:text-xl">
                                         SimpanResit simplifies receipt management for tax relief claims. Secure, easy-to-use, and designed for individual taxpayers.
@@ -74,9 +74,11 @@ export default function LandingPage() {
                             </div>
                             <div className="relative ">
                                 <Iphone15Pro
-                                    className="size-full shadow-lg rounded-[50px] md:rounded-[35px] lg:rounded-[70px] shadow-[0px_0px_500px_-30px_#F77316]"
+                                    className="size-full shadow-lg rounded-[50px] md:rounded-[35px] lg:rounded-[70px] shadow-[0px_0px_100px_0px_rgba(249,_115,_22,_0.5)]"
                                     src="/dashboard2.png"
                                 />
+                                {/* <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-gradient-to-b from-background/0 via-background/50 to-background rounded-lg"></div> */}
+
                             </div>
                             {/* <Image
                                 src="/placeholder.svg?height=400&width=400"
