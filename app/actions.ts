@@ -177,7 +177,7 @@ export const getReliefCategories = async () => {
 };
 
 export const createReceipt = async (receiptInfo: any) => {
-  console.log("Form submitted server");
+  //   console.log("Form submitted server");
   console.log(receiptInfo);
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
@@ -190,6 +190,28 @@ export const createReceipt = async (receiptInfo: any) => {
   const receiptAmount = receiptInfo.get("amount");
   const categoryId = receiptInfo.get("categoryId");
   const receiptFile = receiptInfo.get("receiptFile");
+
+  if (!receiptTitle) {
+    console.log("Receipt title is missing");
+    return {
+      status: "failed",
+      message: "Receipt title is required",
+    };
+  }
+  if (!receiptAmount) {
+    console.log("Receipt amount is missing");
+    return {
+      status: "failed",
+      message: "Receipt amount is required",
+    };
+  }
+  if (!categoryId) {
+    console.log("Category is missing");
+    return {
+      status: "failed",
+      message: "Category is required",
+    };
+  }
 
   const year = receiptDate
     ? new Date(receiptDate).getFullYear()
@@ -282,7 +304,7 @@ export const deleteReceipt = async (receiptId: number) => {
     };
   }
 
-  console.log("receipt", receipt);
+  //   console.log("receipt", receipt);
   revalidatePath("/protected/receipts");
 
   return {
@@ -365,8 +387,8 @@ export const fetchReliefUtilization = async () => {
   }
   const categoryTotals = taxUtils?.reduce(
     (acc: any, receipt: any) => {
-      console.log("test");
-      console.log("receipt", receipt.relief_categories);
+      //   console.log("test");
+      //   console.log("receipt", receipt.relief_categories);
 
       const categoryName = receipt.relief_categories?.name;
       const amount = receipt.amount;
@@ -398,7 +420,7 @@ export const fetchReliefUtilization = async () => {
   if (error) {
     console.log(error);
   }
-  console.log(categoryTotals);
+  //   console.log(categoryTotals);
 
   return categoryTotals;
 };

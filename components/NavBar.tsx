@@ -11,8 +11,8 @@ export default function NavBar() {
 
         <footer className="fixed bottom-0 w-full grid grid-cols-3 p-4 bg-white dark:bg-stone-950 border-t">
             <Link
-                href="/protected"
-                className={`flex flex-col items-center gap-1 text-sm font-medium  ${pathname === '/protected' ? 'text-orange-600' : 'text-muted-foreground'}`}
+                href="/protected/dashboard"
+                className={`flex flex-col items-center gap-1 text-sm font-medium  ${pathname === '/protected/dashboard' ? 'text-orange-600' : 'text-muted-foreground'}`}
                 aria-label="Home"
             >
                 <Home className="w-5 h-5" />
