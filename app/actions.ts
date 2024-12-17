@@ -146,7 +146,7 @@ export const getUserReceipts = async (year: string) => {
   `
     )
     .eq("year", year);
-  console.log(data);
+  //   console.log(data);
 
   if (error) {
     console.log(error);
@@ -178,7 +178,7 @@ export const getReliefCategories = async () => {
 
 export const createReceipt = async (receiptInfo: any) => {
   //   console.log("Form submitted server");
-  console.log(receiptInfo);
+  //   console.log(receiptInfo);
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
@@ -226,7 +226,7 @@ export const createReceipt = async (receiptInfo: any) => {
     const fileName = new Date().getTime();
     path = `${data.user.id}/${year}/${fileName}`;
 
-    console.log(path);
+    // console.log(path);
 
     const { error } = await supabase.storage
       .from("receipts")
@@ -254,7 +254,7 @@ export const createReceipt = async (receiptInfo: any) => {
     file_url: path,
     created_at: new Date(),
   };
-  console.log(insertData);
+  //   console.log(insertData);
 
   const { data: receipt, error: receiptError } = await supabase
     .from("receipts")
@@ -289,6 +289,37 @@ export const deleteReceipt = async (receiptId: number) => {
   }
   //   console.log("data.user.id", data.user.id);
   //   console.log("receiptId", receiptId);
+
+  const { data: receiptData, error: receiptDataError } = await supabase
+    .from("receipts")
+    .select("file_url")
+    .eq("id", receiptId)
+    .eq("user_id", data.user.id)
+    .single();
+
+  if (receiptDataError) {
+    console.log("receiptDataError", receiptDataError);
+    return {
+      status: "failed",
+      message: `Failed to retrieve receipt file path`,
+    };
+  }
+  //delete  receipt file if it exists
+  const filePath = receiptData?.file_url;
+
+  if (filePath) {
+    const { error: deleteFileError } = await supabase.storage
+      .from("receipts")
+      .remove([filePath]);
+
+    if (deleteFileError) {
+      console.log("deleteFileError", deleteFileError);
+      return {
+        status: "failed",
+        message: `Failed to delete receipt file`,
+      };
+    }
+  }
 
   const { data: receipt, error: receiptError } = await supabase
     .from("receipts")
@@ -345,7 +376,7 @@ export const updatePersonalInfo = async (personalInfo: PersonalInfo) => {
     created_at: new Date(),
   };
 
-  console.log(insertData);
+  //   console.log(insertData);
 
   const { data: updateInfo, error: updateError } = await supabase
     .from("users_details")
@@ -458,13 +489,13 @@ export const getPresignedUrl = async (receiptPath: string) => {
 
   const supabase = await createClient();
 
-  console.log(receiptPath);
+  //   console.log(receiptPath);
 
   const { data, error } = await supabase.storage
     .from("receipts")
     .createSignedUrl(receiptPath, 60);
 
-  console.log(data);
+  //   console.log(data);
 
   return data?.signedUrl;
 };

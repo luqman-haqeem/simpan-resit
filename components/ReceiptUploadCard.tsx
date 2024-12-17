@@ -30,8 +30,6 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { log } from "console"
-
 
 interface Category {
     id: number
@@ -76,7 +74,7 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
         const formData = new FormData(event.currentTarget)
         formData.append("categoryId", selectedCategory?.id.toString() ?? '');
         formData.append("receiptFile", fileInput?.current?.files?.[0]!);
-        console.log(formData.get("categoryId"));
+        // console.log(formData.get("categoryId"));
 
         let receipt;
         try {
@@ -200,6 +198,7 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
                                                                 }}
                                                             >
                                                                 {category.name}
+
                                                             </CommandItem>
                                                         ))}
                                                     </CommandGroup>
