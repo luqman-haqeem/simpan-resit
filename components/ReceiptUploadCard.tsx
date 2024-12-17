@@ -81,12 +81,14 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
             receipt = await createReceipt(formData);
         } catch (error) {
             console.error("Error creating receipt:", error);
-            toast({
+            return toast({
                 variant: "destructive",
                 description: "Failed to create receipt",
             });
-            setLoading(false);
-            return;
+
+
+        } finally {
+            setLoading(false)
         }
 
         if (receipt.status == 'success') {
@@ -224,6 +226,9 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
                                 // required
                                 // className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                                 />
+                                <p className="text-sm text-muted-foreground">
+                                    Your message will be copied to the support team.
+                                </p>
                             </div>
                             <Button type="submit" className="w-full" disabled={loading}>
                                 {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
