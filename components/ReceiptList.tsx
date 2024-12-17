@@ -35,7 +35,7 @@ import Link from "next/link";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Skeleton } from "./ui/skeleton";
 
-interface Receipt {
+type Receipt = {
     id: number;
     title: string;
     receipt_date: string;
@@ -45,9 +45,12 @@ interface Receipt {
         name: string;
     };
 }
-export default function ReceiptList({ receipts }: { receipts: Receipt[] }) {
+interface ReceiptListProps {
+    receipts: Receipt[];
+}
 
 
+export default function ReceiptList({ receipts }: { receipts: ReceiptListProps }) {
 
     const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null)
 
