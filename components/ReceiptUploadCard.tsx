@@ -3,6 +3,7 @@ import * as React from "react"
 
 import { useState, useEffect, useRef } from "react"
 
+import { RECEIPT_UPLOAD_SCHEMA } from "@/utils/schema"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -11,6 +12,7 @@ import { getReliefCategories, createReceipt } from "@/app/actions";
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 import { Icons } from "@/components/icons"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 import {
     Command,
@@ -30,6 +32,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
+import { AlertCircle } from "lucide-react"
 
 interface Category {
     id: number
@@ -51,11 +54,33 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
     const [loading, setLoading] = useState(false)
 
 
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            setFile(event.target.files[0])
+        const file = event.target.files?.[0];
+        if (file) {
+            const isValid = validateFile(file, RECEIPT_UPLOAD_SCHEMA, "receipt_file");
+            if (isValid) { setFile(file) }
+            else {
+                event.target.value = "";
+            };
         }
+
     }
+
+    const validateFile = (file: File, schema: any, field: string) => {
+        const result = schema.safeParse(file);
+        if (!result.success) {
+
+            toast({
+                variant: "destructive",
+                description: result.error.errors[0].message,
+            })
+            return false;
+        } else {
+
+            return true;
+        }
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         setLoading(true)
@@ -216,7 +241,7 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
                                 <Input id="receiptDate" name="receiptDate" type="date" />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="file">Receipt File (Optional)</Label>
+                                <Label htmlFor="file">Receipt File (Optional) <span className="text-sm text-muted-foreground"> Max 5MB</span></Label>
                                 <Input
                                     id="receipt_file"
                                     type="file"
@@ -226,11 +251,15 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
                                 // required
                                 // className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                                 />
-                                <p className="text-sm text-muted-foreground">
-                                    Your message will be copied to the support team.
-                                </p>
+
+
                             </div>
-                            <Button type="submit" className="w-full" disabled={loading}>
+
+
+
+                            <Button type="submit" className="w-full" disabled={
+                                loading
+                            }>
                                 {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                                     : 'Upload Receipt'}
                             </Button>
