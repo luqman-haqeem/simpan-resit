@@ -151,6 +151,40 @@ export const getUserReceipts = async (year: string) => {
   if (error) {
     console.log(error);
   }
+
+  // Dummy data for receipts
+  //   const dummyData = [
+  //     {
+  //       id: 1,
+  //       title: "Groceries",
+  //       amount: 150.0,
+  //       year: "2023",
+  //       relief_categories: {
+  //         id: 1,
+  //         name: "Food",
+  //       },
+  //     },
+  //     {
+  //       id: 2,
+  //       title: "Gasoline",
+  //       amount: 50.0,
+  //       year: "2023",
+  //       relief_categories: {
+  //         id: 2,
+  //         name: "Transportation",
+  //       },
+  //     },
+  //     {
+  //       id: 3,
+  //       title: "Utilities",
+  //       amount: 200.0,
+  //       year: "2023",
+  //       relief_categories: {
+  //         id: 3,
+  //         name: "Bills",
+  //       },
+  //     },
+  //   ];
   return data;
 };
 
@@ -173,6 +207,33 @@ export const getReliefCategories = async () => {
   if (error) {
     console.log(error);
   }
+  return data;
+};
+
+export const getReceiptDetails = async (receiptId: string) => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("receipts")
+    .select(
+      `
+      id,
+      title,
+      amount,
+      year,
+      receipt_date,
+      category_id,
+      file_url
+    `
+    )
+    .eq("id", receiptId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching receipt details:", error);
+    return null;
+  }
+
   return data;
 };
 
@@ -277,6 +338,132 @@ export const createReceipt = async (receiptInfo: any) => {
   };
 
   //   console.log(receipt);
+};
+
+export const editReceipt = async (formData: FormData) => {
+  const receiptId = formData.get("receiptId")?.toString();
+  const receiptTitle = formData.get("title")?.toString();
+  const receiptAmount = formData.get("amount")?.toString();
+  const receiptDate = formData.get("receiptDate")?.toString();
+  const categoryId = formData.get("categoryId")?.toString();
+  const existingPath = formData.get("existingPath")?.toString();
+
+  const receiptFile = formData.get("receiptFile") as File | null;
+
+  if (!receiptId) {
+    console.log("Receipt Id is missing");
+    return {
+      status: "failed",
+      message: "Receipt Id is required",
+    };
+  }
+  if (!receiptTitle) {
+    console.log("Receipt title is missing");
+    return {
+      status: "failed",
+      message: "Receipt title is required",
+    };
+  }
+  if (!receiptAmount) {
+    console.log("Receipt amount is missing");
+    return {
+      status: "failed",
+      message: "Receipt amount is required",
+    };
+  }
+  if (!categoryId) {
+    console.log("Category is missing");
+    return {
+      status: "failed",
+      message: "Category is required",
+    };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error || !data?.user) {
+    console.log("Invalid user");
+    redirect("/login");
+  }
+
+  const year = receiptDate
+    ? new Date(receiptDate).getFullYear()
+    : new Date().getFullYear();
+
+  let path = existingPath;
+  if (receiptFile && receiptFile.name) {
+    console.log("upload file");
+
+    if (existingPath) {
+      // remove  old  receipt
+      const { data: Oldfile, error: errorDeleted } = await supabase.storage
+        .from("avatars")
+        .remove([existingPath]);
+
+      if (errorDeleted) {
+        console.log(errorDeleted);
+        return {
+          status: "failed",
+          message: `Unable to delete old receipt`,
+        };
+      }
+    }
+
+    const fileName = new Date().getTime();
+    path = `${data.user.id}/${year}/${fileName}`;
+
+    // console.log(path);
+
+    const { error } = await supabase.storage
+      .from("receipts")
+      .upload(path, receiptFile, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (error) {
+      console.log(error);
+      return {
+        status: "failed",
+        message: `Unable to upload ${receiptTitle} receipt`,
+      };
+    }
+  }
+
+  const updateData = {
+    title: receiptTitle,
+    amount: receiptAmount,
+    receipt_date: receiptDate,
+    category_id: categoryId,
+    file_url: path,
+    year: year,
+    updated_at: new Date(),
+  };
+
+  //   return updateData;
+
+  const { data: receipt, error: receiptError } = await supabase
+    .from("receipts")
+    .update(updateData)
+    .eq("id", receiptId)
+    .eq("user_id", data.user.id)
+    .select();
+
+  revalidatePath("/protected/receipts");
+
+  if (receiptError) {
+    console.log(receiptError);
+    return {
+      status: "failed",
+      message: `Receipt ${receiptTitle} Not Updated`,
+    };
+  }
+
+  return {
+    status: "success",
+    message: `Successfully updated ${receiptTitle}`,
+  };
 };
 
 export const deleteReceipt = async (receiptId: number) => {

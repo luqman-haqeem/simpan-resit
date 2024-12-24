@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getReliefCategories, createReceipt } from "@/app/actions";
+import { getReliefCategories, editReceipt, getPresignedUrl } from "@/app/actions";
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 import { Icons } from "@/components/icons"
@@ -31,18 +31,29 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, ExternalLink, Info } from "lucide-react"
 
 interface Category {
     id: number
     name: string
     description: string
 }
+type Receipt = {
+    id: number
+    title: string
+    amount: number
+    year: number
+    receipt_date: string
+    category_id: number
+    file_url: string
+
+}
 interface ReceiptUploadProps {
+    receiptDetails: Receipt
     reliefCategories: Category[];
 }
 
-export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadProps) {
+export default function ReceiptUploadCard({ reliefCategories, receiptDetails }: ReceiptUploadProps) {
     const router = useRouter()
 
     const [file, setFile] = useState<File | null>(null)
@@ -51,8 +62,20 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
     const fileInput = useRef<HTMLInputElement>(null);
     const { toast } = useToast()
     const [loading, setLoading] = useState(false)
+    const [receiptLoading, setReceiptLoading] = useState(false)
 
+    useEffect(() => {
+        setSelectedCategory(
+            reliefCategories.find((priority) => priority.id === receiptDetails.category_id) || null
+        )
+    }, [])
+    async function handleViewReceipt() {
+        setReceiptLoading(true);
+        let data = await getPresignedUrl(receiptDetails?.file_url ?? '')
 
+        window.open(data, '_blank');
+        setReceiptLoading(false);
+    }
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -102,7 +125,7 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
 
         let receipt;
         try {
-            receipt = await createReceipt(formData);
+            receipt = await editReceipt(formData);
         } catch (error) {
             console.error("Error creating receipt:", error);
             return toast({
@@ -140,59 +163,15 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-2">
                                 <Label htmlFor="title">Receipt Name</Label>
-                                <Input id="title" name="title" placeholder="New Phone ..." required />
+                                <Input id="title" name="title" placeholder="New Phone ..." defaultValue={receiptDetails.title} required />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="">Amount</Label>
-                                <Input id="amount" name="amount" placeholder="1000" type="number" step="0.01" required />
+                                <Input id="amount" name="amount" defaultValue={receiptDetails.amount} placeholder="1000" type="number" step="0.01" required />
                             </div>
 
                             <div className="flex flex-col space-y-2">
                                 <Label htmlFor="category">Category</Label>
-                                {/* <Popover open={open} onOpenChange={setOpen}>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            role="combobox"
-                                            aria-expanded={open}
-                                        // className="w-[200px] justify-between"
-                                        >
-                                            {value
-                                                ? reliefCategories.find((category) => category.name === value)?.name
-                                                : "Select category..."}
-                                            <ChevronsUpDown className="opacity-50" />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-[200px] p-0">
-                                        <Command>
-                                            <CommandInput placeholder="Search category..." />
-                                            <CommandList>
-                                                <CommandEmpty>No category found.</CommandEmpty>
-                                                <CommandGroup>
-                                                    {reliefCategories.map((category) => (
-                                                        <CommandItem
-                                                            key={category.id}
-                                                            value={category.name}
-                                                            onSelect={(currentValue) => {
-                                                                setValue(currentValue === value ? "" : currentValue)
-                                                                setOpen(false)
-                                                            }}
-                                                        >
-                                                            {category.name}
-                                                            <Check
-                                                                className={cn(
-                                                                    "ml-auto",
-                                                                    value === category.name ? "opacity-100" : "opacity-0"
-                                                                )}
-                                                            />
-                                                        </CommandItem>
-                                                    ))}
-                                                </CommandGroup>
-                                            </CommandList>
-                                        </Command>
-                                    </PopoverContent>
-                                </Popover> */}
-
                                 <Drawer open={open} onOpenChange={setOpen}>
                                     <DrawerHeader className="hidden">
                                         <DrawerTitle>Category</DrawerTitle>
@@ -237,30 +216,43 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="receiptDate">Date of Purchase (Optional)</Label>
-                                <Input id="receiptDate" name="receiptDate" type="date" />
+                                <Input id="receiptDate" name="receiptDate" type="date" defaultValue={receiptDetails.receipt_date} />
                             </div>
+
+
                             <div className="space-y-2">
-                                <Label htmlFor="file">Receipt File (Optional) <span className="text-sm text-muted-foreground"> Max 5MB</span></Label>
-                                <Input
-                                    id="receipt_file"
-                                    type="file"
-                                    onChange={handleFileChange}
-                                    accept="image/*,.pdf"
-                                    ref={fileInput}
-                                // required
-                                // className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-                                />
+                                <div className="grid grid-cols-6  gap-4">
+                                    <div className="col-span-4">
+                                        <Label htmlFor="file">Upload File <span className="text-sm text-muted-foreground"> Max 5MB</span></Label>
+                                        <Input
+                                            id="receiptFile"
+                                            type="file"
+                                            onChange={handleFileChange}
+                                            accept="image/*,.pdf"
+                                            ref={fileInput}
 
+                                        />
+                                    </div>
+                                    <div className="col-span-2 content-end">
+                                        <Button variant="link" className="col-start-1 col-span-2" onClick={handleViewReceipt} disabled={receiptLoading}>
+                                            {receiptLoading ?
+                                                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                                : <>View Existing Receipt <ExternalLink />
+                                                </>}
+                                        </Button>
+                                        <input type="hidden" name="existingPath" defaultValue={receiptDetails?.file_url} />
+                                        <input type="hidden" name="receiptId" defaultValue={receiptDetails?.id} />
+                                    </div>
 
+                                </div>
+                                <p className="flex flex-row text-sm text-muted-foreground"><Info size={16} />  <span className="px-1">Leave the file field empty if you want to keep the existing file.</span></p>
                             </div>
-
-
 
                             <Button type="submit" className="w-full" disabled={
                                 loading
                             }>
                                 {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                    : 'Upload Receipt'}
+                                    : 'Submit Edit'}
                             </Button>
                         </form>
                     </CardContent>

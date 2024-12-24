@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { getPresignedUrl, deleteReceipt } from "@/app/actions";
 
-import { CalendarIcon, Upload, Trash2, ExternalLink } from "lucide-react"
+import { CalendarIcon, Upload, Trash2, ExternalLink, Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Icons } from "@/components/icons"
@@ -155,7 +155,7 @@ export default function ReceiptList({ receipts }: { receipts: ReceiptListProps }
                                                     </DialogHeader>
                                                     <div className="space-y-4">
                                                         <div>
-                                                            <h3 className="font-medium">Name</h3>
+                                                            <h3 className="font-medium">Receipt Name</h3>
                                                             <p>{receipt.title}</p>
                                                         </div>
                                                         <div>
@@ -179,18 +179,34 @@ export default function ReceiptList({ receipts }: { receipts: ReceiptListProps }
 
                                                                 </div> */}
                                                     </div>
-                                                    <DialogFooter className="grid grid-cols-4 gap-4">
+                                                    <DialogFooter className="grid grid-cols-8">
 
                                                         {receipt.file_url ?
-                                                            <Button className="col-start-1 col-span-2" onClick={handleViewReceipt} disabled={receiptLoading}>
+                                                            <Button variant="link" className="col-start-1 col-span-2" onClick={handleViewReceipt} disabled={receiptLoading}>
                                                                 {receiptLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                                                                     : <>View Receipt <ExternalLink /></>}
                                                             </Button> :
                                                             null
                                                         }
+                                                        <Link
+                                                            href={{
+                                                                pathname: `/protected/receipts/${receipt.id}/edit`,
+                                                            }}
+                                                            className="col-start-7 justify-self-end"
+                                                        >
+                                                            <Button variant="outline" size="icon" >
+
+
+                                                                <Pencil />
+
+
+                                                            </Button>
+                                                        </Link>
+
                                                         <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                                                             <AlertDialogTrigger asChild>
-                                                                <Button variant="destructive" className="col-end-5">
+
+                                                                <Button variant="destructive" size="icon" className="col-end-9 justify-self-end">
                                                                     <Trash2 className="h-4 w-4" />
 
                                                                 </Button>
@@ -232,6 +248,6 @@ export default function ReceiptList({ receipts }: { receipts: ReceiptListProps }
 
             </CardContent>
 
-        </Card>
+        </Card >
     )
 }

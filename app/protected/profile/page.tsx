@@ -24,7 +24,7 @@ export default async function ProfilePage() {
                         <div className="flex items-center space-x-4  flex-wrap">
                             <Avatar className="hidden sm:block">
                                 <AvatarImage src={user.profileImg} alt="Profile picture" />
-                                <AvatarFallback>{user.name.substring(0, 1)}</AvatarFallback>
+                                <AvatarFallback>{user?.name?.substring(0, 1)}</AvatarFallback>
                             </Avatar>
                             <div >
                                 <CardTitle>{user.name}</CardTitle>
