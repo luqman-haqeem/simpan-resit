@@ -254,6 +254,9 @@ export default function ReceiptUploadCard({ reliefCategories, receiptDetails }: 
                                 {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                                     : 'Submit Edit'}
                             </Button>
+                            <Button variant={"secondary"} className="w-full" onClick={() => router.push('/protected.receipts')}>
+                                Go Back
+                            </Button>
                         </form>
                     </CardContent>
                 </Card>
