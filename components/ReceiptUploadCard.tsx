@@ -199,7 +199,7 @@ export default function ReceiptUploadCard({ reliefCategories }: ReceiptUploadPro
                                     </DrawerHeader>
 
                                     <DrawerTrigger asChild>
-                                        <Button variant="outline" className="justify-start">
+                                        <Button variant="outline" className="overflow-hidden justify-start">
                                             {selectedCategory ? <>{selectedCategory.name}</> : <>Select category</>}
                                         </Button>
                                     </DrawerTrigger>

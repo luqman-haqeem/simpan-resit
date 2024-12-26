@@ -179,10 +179,10 @@ export default function ReceiptList({ receipts }: { receipts: ReceiptListProps }
 
                                                                 </div> */}
                                                     </div>
-                                                    <DialogFooter className="grid grid-cols-8">
+                                                    <DialogFooter className="grid grid-cols-6 gap-3">
 
                                                         {receipt.file_url ?
-                                                            <Button variant="link" className="col-start-1 col-span-2" onClick={handleViewReceipt} disabled={receiptLoading}>
+                                                            <Button variant="link" className=" col-span-2" onClick={handleViewReceipt} disabled={receiptLoading}>
                                                                 {receiptLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                                                                     : <>View Receipt <ExternalLink /></>}
                                                             </Button> :
@@ -192,7 +192,7 @@ export default function ReceiptList({ receipts }: { receipts: ReceiptListProps }
                                                             href={{
                                                                 pathname: `/protected/receipts/${receipt.id}/edit`,
                                                             }}
-                                                            className="col-start-7 justify-self-end"
+                                                            className="col-end-6 justify-self-end"
                                                         >
                                                             <Button variant="outline" size="icon" >
 
@@ -206,7 +206,7 @@ export default function ReceiptList({ receipts }: { receipts: ReceiptListProps }
                                                         <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                                                             <AlertDialogTrigger asChild>
 
-                                                                <Button variant="destructive" size="icon" className="col-end-9 justify-self-end">
+                                                                <Button variant="destructive" size="icon" className="col-end-7 justify-self-end">
                                                                     <Trash2 className="h-4 w-4" />
 
                                                                 </Button>

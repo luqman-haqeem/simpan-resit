@@ -152,116 +152,108 @@ export default function ReceiptUploadCard({ reliefCategories, receiptDetails }: 
     }
 
     return (
-        <div className="flex flex-col ">
+        <Card>
+            <CardHeader>
+                <CardTitle>Receipt Details</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="title">Receipt Name</Label>
+                        <Input id="title" name="title" placeholder="New Phone ..." defaultValue={receiptDetails.title} required />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="">Amount</Label>
+                        <Input id="amount" name="amount" defaultValue={receiptDetails.amount} placeholder="1000" type="number" step="0.01" required />
+                    </div>
 
-            <main className="flex-1 p-4 overflow-y-auto">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Receipt Details</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="title">Receipt Name</Label>
-                                <Input id="title" name="title" placeholder="New Phone ..." defaultValue={receiptDetails.title} required />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="">Amount</Label>
-                                <Input id="amount" name="amount" defaultValue={receiptDetails.amount} placeholder="1000" type="number" step="0.01" required />
-                            </div>
+                    <div className="flex flex-col space-y-2">
+                        <Label htmlFor="category">Category</Label>
+                        <Drawer open={open} onOpenChange={setOpen}>
+                            <DrawerHeader className="hidden">
+                                <DrawerTitle>Category</DrawerTitle>
+                            </DrawerHeader>
 
-                            <div className="flex flex-col space-y-2">
-                                <Label htmlFor="category">Category</Label>
-                                <Drawer open={open} onOpenChange={setOpen}>
-                                    <DrawerHeader className="hidden">
-                                        <DrawerTitle>Category</DrawerTitle>
-                                    </DrawerHeader>
+                            <DrawerTrigger asChild>
+                                <Button variant="outline" className="overflow-hidden justify-start">
+                                    {selectedCategory ? <>{selectedCategory.name}</> : <>Select category</>}
+                                </Button>
+                            </DrawerTrigger>
 
-                                    <DrawerTrigger asChild>
-                                        <Button variant="outline" className="justify-start">
-                                            {selectedCategory ? <>{selectedCategory.name}</> : <>Select category</>}
-                                        </Button>
-                                    </DrawerTrigger>
+                            <DrawerContent>
+                                <div className="mt-4 border-t">
 
-                                    <DrawerContent>
-                                        <div className="mt-4 border-t">
+                                    <Command>
+                                        <CommandInput placeholder="Filter categories..." />
+                                        <CommandList>
+                                            <CommandEmpty>No results found.</CommandEmpty>
+                                            <CommandGroup>
+                                                {reliefCategories.map((category) => (
+                                                    <CommandItem
+                                                        key={category.id}
+                                                        value={category.name}
+                                                        onSelect={(value) => {
+                                                            setSelectedCategory(
+                                                                reliefCategories.find((priority) => priority.name === value) || null
+                                                            )
+                                                            setOpen(false)
+                                                        }}
+                                                    >
+                                                        {category.name}
 
-                                            <Command>
-                                                <CommandInput placeholder="Filter categories..." />
-                                                <CommandList>
-                                                    <CommandEmpty>No results found.</CommandEmpty>
-                                                    <CommandGroup>
-                                                        {reliefCategories.map((category) => (
-                                                            <CommandItem
-                                                                key={category.id}
-                                                                value={category.name}
-                                                                onSelect={(value) => {
-                                                                    setSelectedCategory(
-                                                                        reliefCategories.find((priority) => priority.name === value) || null
-                                                                    )
-                                                                    setOpen(false)
-                                                                }}
-                                                            >
-                                                                {category.name}
-
-                                                            </CommandItem>
-                                                        ))}
-                                                    </CommandGroup>
-                                                </CommandList>
-                                            </Command>
-                                        </div>
-                                    </DrawerContent>
-                                </Drawer>
-
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="receiptDate">Date of Purchase (Optional)</Label>
-                                <Input id="receiptDate" name="receiptDate" type="date" defaultValue={receiptDetails.receipt_date} />
-                            </div>
-
-
-                            <div className="space-y-2">
-                                <div className="grid grid-cols-6  gap-4">
-                                    <div className="col-span-4">
-                                        <Label htmlFor="file">Upload File <span className="text-sm text-muted-foreground"> Max 5MB</span></Label>
-                                        <Input
-                                            id="receiptFile"
-                                            type="file"
-                                            onChange={handleFileChange}
-                                            accept="image/*,.pdf"
-                                            ref={fileInput}
-
-                                        />
-                                    </div>
-                                    <div className="col-span-2 content-end">
-                                        <Button variant="link" className="col-start-1 col-span-2" onClick={handleViewReceipt} disabled={receiptLoading}>
-                                            {receiptLoading ?
-                                                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                                : <>View Existing Receipt <ExternalLink />
-                                                </>}
-                                        </Button>
-                                        <input type="hidden" name="existingPath" defaultValue={receiptDetails?.file_url} />
-                                        <input type="hidden" name="receiptId" defaultValue={receiptDetails?.id} />
-                                    </div>
-
+                                                    </CommandItem>
+                                                ))}
+                                            </CommandGroup>
+                                        </CommandList>
+                                    </Command>
                                 </div>
-                                <p className="flex flex-row text-sm text-muted-foreground"><Info size={16} />  <span className="px-1">Leave the file field empty if you want to keep the existing file.</span></p>
+                            </DrawerContent>
+                        </Drawer>
+
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="receiptDate">Date of Purchase (Optional)</Label>
+                        <Input id="receiptDate" name="receiptDate" type="date" defaultValue={receiptDetails.receipt_date} />
+                    </div>
+
+
+                    <div className="space-y-2">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-6">
+                            <div className="col-span-1 md:col-span-4">
+                                <Label htmlFor="file">Upload File <span className="text-sm text-muted-foreground"> Max 5MB</span></Label>
+                                <Input
+                                    id="receiptFile"
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    accept="image/*,.pdf"
+                                    ref={fileInput}
+                                />
                             </div>
+                            <div className="col-span-1 md:col-span-2 md:content-end">
+                                <Button variant="link" className="col-start-1 col-span-2" onClick={handleViewReceipt} disabled={receiptLoading}>
+                                    {receiptLoading ?
+                                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                        : <>View Existing Receipt <ExternalLink />
+                                        </>}
+                                </Button>
+                                <input type="hidden" name="existingPath" defaultValue={receiptDetails?.file_url} />
+                                <input type="hidden" name="receiptId" defaultValue={receiptDetails?.id} />
+                            </div>
+                        </div>
+                        <p className="flex flex-row text-sm text-muted-foreground"><Info size={16} />  <span className="px-1">Leave the file field empty if you want to keep the existing file.</span></p>
+                    </div>
 
-                            <Button type="submit" className="w-full" disabled={
-                                loading
-                            }>
-                                {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                    : 'Submit Edit'}
-                            </Button>
-                            <Button variant={"secondary"} className="w-full" onClick={() => router.push('/protected.receipts')}>
-                                Go Back
-                            </Button>
-                        </form>
-                    </CardContent>
-                </Card>
-            </main>
-
-        </div >
+                    <Button type="submit" className="w-full" disabled={
+                        loading
+                    }>
+                        {loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                            : 'Submit Update'}
+                    </Button>
+                    <Button variant={"secondary"} className="w-full" onClick={() => router.push('/protected.receipts')}>
+                        Go Back
+                    </Button>
+                </form>
+            </CardContent>
+        </Card>
     )
 }
